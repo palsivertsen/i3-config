@@ -1,0 +1,39 @@
+POWER_OPTIONS='Poweroff
+Lock
+Logout
+Restart
+Cancel'
+
+COMMAND_MSG='What to do?'
+CONFIRM_OPTIONS='No
+Yes'
+
+function confirm {
+	case $(dmenu -i -p "[$1] Are you sure?" <<< "$CONFIRM_OPTIONS") in
+	Yes)
+		$2
+		;;
+	*)
+		exit
+		;;
+	esac
+}
+
+CMD=$(dmenu -i -p "$COMMAND_MSG" <<< "$POWER_OPTIONS")
+case $CMD in
+Poweroff)
+	confirm $CMD "poweroff"
+	;;
+Lock)
+	confirm $CMD "i3lock -def -I 10"
+	;;
+Logout)
+	confirm $CMD "i3-msg exit"
+	;;
+Restart)
+	confirm $CMD "reboot"
+	;;
+*)
+	exit
+	;;
+esac
